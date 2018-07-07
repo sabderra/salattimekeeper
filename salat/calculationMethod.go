@@ -1,4 +1,4 @@
-package src
+package salat
 
 import (
 	"fmt"
@@ -147,15 +147,6 @@ func (l Location) timezoneAdjustment(datetime time.Time) (tzAdjust float64) {
 	tzAdjust = tzoneOffset - l.Lng/15.0
 
 	return tzAdjust
-}
-
-// Convert hours to day portion
-func dayPortionXXX(times TimeKeeper) *TimeKeeper {
-	dayFraction := NewTimeKeeper()
-	for i, t := range times.salat {
-		dayFraction.salat[i] = t / 24.0
-	}
-	return dayFraction
 }
 
 // compute asr time

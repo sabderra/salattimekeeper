@@ -1,9 +1,13 @@
-package src
+package salat
 
 import (
 	"testing"
 	"time"
 )
+
+var isnaParams = map[TIMES]float64{FAJR: 15, ISHA: 15}
+var isnaConfig = make(map[string]string)
+var ISNA = NewCalculationMethod("Islamic Society of North America (ISNA)", isnaParams, isnaConfig)
 
 func TestJulianFromTime_20180704_w_lng(test *testing.T) {
 	t1 := time.Date(2018, time.July, 4, 0, 0, 0, 0, time.Local)

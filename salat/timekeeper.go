@@ -1,4 +1,4 @@
-package src
+package salat
 
 import (
 	"time"
@@ -44,4 +44,10 @@ func (timeKeeper TimeKeeper) toDayUnits() {
 	for index, t := range timeKeeper.salat {
 		timeKeeper.salat[index] = t / 24.0
 	}
+}
+
+// Set date to use for salat calculations
+func (timeKeeper TimeKeeper) SetDate(year int, month int, day int) {
+	timeKeeper.cDate = time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local)
+	timeKeeper.jDate = JulianFromTime(timeKeeper.cDate)
 }

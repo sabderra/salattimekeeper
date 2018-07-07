@@ -27,7 +27,7 @@ VERSION ?= $(0.0.0)
 all: clean pretest test compile
 
 test: compile
-	$(GO) test 
+	$(GO) test ./... 
 
 clean:
 	-rm -f $(VET_REPORT)
