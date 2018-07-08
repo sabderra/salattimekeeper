@@ -74,7 +74,6 @@ type timesPayload struct {
 	Isha    string `json:"isha"`
 }
 
-
 func SendJsonResponse(w http.ResponseWriter, times map[salat.TIMES]string) {
 
 	timesPayload := timesPayload{

@@ -2,8 +2,8 @@ package location
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	log "github.com/Sirupsen/logrus"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"

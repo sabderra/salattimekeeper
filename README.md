@@ -1,6 +1,8 @@
 # Salat Time Keeper
 Go based REST server for calculating Salat times.
 
+--- NOTE still a work-in-progress ---
+
 The Prayer time calculations are based on the Python code from http://praytimes.org/. The license can be found [here](License_praytime.org). Some of the algorithms have been updated to use those from United States Naval Observatory (USNO)  see references below.
 
 ## Install
