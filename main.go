@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
+	"github.com/sabderra/salattimekeeper/location"
 	"github.com/sabderra/salattimekeeper/salat"
 	"net/http"
 	"os"
@@ -15,6 +15,8 @@ import (
 )
 
 var port = 8999
+
+var myLocation location.MyLocation
 
 // shutdownChan for stopping go routines
 var shutdownChan = make(chan struct{})
@@ -66,19 +68,13 @@ func main() {
 	registerSignalTermHandler()
 	registerSignalHupHandler()
 
-	router := mux.NewRouter()
+	var err error
+	myLocation, err = location.GetLocationFromIp()
+	if err != nil {
+		log.Warn(err.Error())
+	}
 
-	//r.Path("/salat/").
-	//	Queries("lat", "{lat}").
-	//	Queries("lng", "{lng}").
-	//	HandlerFunc(GetSalatTimes).
-	//	Name("salat")
-
-	router.Path("/salat/").
-		HandlerFunc(GetSalatTimes).
-		Name("salat")
-
-	start(port, router)
+	start(port, CreateRouter())
 	log.Info("SalatTimeKeeper stopping")
 
 }
@@ -86,19 +82,6 @@ func main() {
 func logClientRequest(req *http.Request) {
 	forwardedFor := req.Header.Get("X-Forwarded-For")
 	log.Debugf("request  %s from %s, %s", req.RequestURI, req.RemoteAddr, forwardedFor)
-}
-
-func GetSalatTimes(w http.ResponseWriter, req *http.Request) {
-	logClientRequest(req)
-
-	//vars := mux.Vars(r)
-
-	var l = salat.NewLocation(42.4223, -71.1328, 0, ISNA)
-
-	t := time.Date(2000, time.January, 1, 0, 0, 0, 0, time.Local)
-	times := l.ComputePrayerTimes(t, "")
-
-	SendJsonResponse(w, times)
 }
 
 func start(port int, handler *mux.Router) {
@@ -167,22 +150,6 @@ func registerSignalHupHandler() {
 
 // Shutdown stops the worker to stop listening for work requests.
 //
-// Note that the worker will only stop *after* it has finished its work.
 func shutdown() {
 	close(shutdownChan)
-}
-
-func SendJsonResponse(w http.ResponseWriter, times map[salat.TIMES]string) {
-	jData, err := json.Marshal(times)
-	log.Debug(times)
-	if err != nil {
-		SendErrorResponse(w, http.StatusInternalServerError)
-	} else {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(jData)
-	}
-}
-
-func SendErrorResponse(w http.ResponseWriter, status int) {
-	w.WriteHeader(status)
 }

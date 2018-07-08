@@ -17,37 +17,64 @@ const (
 	ISHA
 )
 
-type TimeKeeper struct {
-	salat map[TIMES]float64
-	jDate float64
-	cDate time.Time
+var time_string = map[TIMES]string{
+	IMSAK:   "imsak",
+	FAJR:    "fajr",
+	SUNRISE: "sunrise",
+	DHUHR:   "dhuhr",
+	ASR:     "asr",
+	SUNSET:  "sunset",
+	MAGHRIB: "maghrib",
+	ISHA:    "isha",
 }
 
-func NewTimeKeeper() *TimeKeeper {
-	t := new(TimeKeeper)
-	t.salat = make(map[TIMES]float64)
+type TimeKeeper struct {
+	location Location
+	cDate    time.Time
+}
 
-	t.salat[IMSAK] = 5
-	t.salat[FAJR] = 5
-	t.salat[SUNRISE] = 6
-	t.salat[DHUHR] = 12
-	t.salat[ASR] = 13
-	t.salat[SUNSET] = 18
-	t.salat[MAGHRIB] = 18
-	t.salat[ISHA] = 18
+func NewTimeKeeper(lat float64, lng float64, elv float64, mth *CalculationMethod) *TimeKeeper {
+
+	l := NewLocation(lat, lng, 0, mth)
+
+	t := new(TimeKeeper)
+	t.location = *l
 
 	return t
 }
 
 // Convert hours to day units
 func (timeKeeper TimeKeeper) toDayUnits() {
-	for index, t := range timeKeeper.salat {
-		timeKeeper.salat[index] = t / 24.0
+	for index, t := range timeKeeper.location.salat {
+		timeKeeper.location.salat[index] = t / 24.0
 	}
 }
 
 // Set date to use for salat calculations
 func (timeKeeper TimeKeeper) SetDate(year int, month int, day int) {
 	timeKeeper.cDate = time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local)
-	timeKeeper.jDate = JulianFromTime(timeKeeper.cDate)
+}
+
+func (timeKeeper TimeKeeper) SetLocationLatLng(lat float64, lng float64, elv float64, mth *CalculationMethod) *Location {
+	var l = NewLocation(lat, lng, 0, mth)
+	timeKeeper.location = *l
+	return l
+}
+
+func (timeKeeper TimeKeeper) SetCalculationMethod(mth *CalculationMethod) {
+	timeKeeper.location.mth = *mth
+}
+
+func (timeKeeper TimeKeeper) GetPrayerTimes(datetime time.Time) map[TIMES]string {
+
+	times := timeKeeper.location.computePrayerTimes(datetime)
+
+	// Return format times as string
+	var fmtTimes = make(map[TIMES]string)
+
+	for i, t := range times {
+		fmtTimes[i] = formatTime(t)
+	}
+
+	return fmtTimes
 }
