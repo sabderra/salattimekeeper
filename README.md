@@ -20,8 +20,9 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 Install build dependencies. This project used [gometalinter](https://github.com/alecthomas/gometalinter) for linting and [Dep](https://github.com/golang/dep) for dependency management. Addition dependencies will be installed when building the project.
 
 ```
-go get -u github.com/alecthomas/gometalinter
 go get -u github.com/golang/dep/cmd/dep
+go get -u github.com/alecthomas/gometalinter
+gometalinter --install    # Install known linters
 ```
 
 Retrieve and build this project
