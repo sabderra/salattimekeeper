@@ -1,0 +1,22 @@
+[server]
+bind-address = "0.0.0.0:8999"
+
+[location]
+enabled = true
+
+[[salat.method]]
+name = "Islamic Society of North America (ISNA)"
+fajr = 15.0
+isha = 15.0
+
+[[salat.method]]
+name = "Muslim World League"
+fajr = 18.0
+isha = 17.0
+
+[salat.settings]
+imsakAngleAdj = 10.0
+fajrAngleAdj = 0.0
+dhuhrAngleAdj = 0.0
+asrFactor = 1
+ishaAngleAdj = 0.0

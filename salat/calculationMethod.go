@@ -19,6 +19,16 @@ type CalculationMethod struct {
 	config map[string]string
 }
 
+// NewMyLocation returns an instance of MyLocation with the provided Lat and Lng.
+func NewMethod(c methodConfig) *CalculationMethod {
+
+	m := &CalculationMethod{}
+
+	m.Name = c.Name
+
+	return m
+}
+
 func NewCalculationMethod(name string, params map[TIMES]float64, config map[string]string) *CalculationMethod {
 
 	c := CalculationMethod{name, params, config}

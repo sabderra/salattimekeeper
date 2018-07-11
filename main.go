@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/BurntSushi/toml"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
 	"github.com/sabderra/salattimekeeper/location"
@@ -14,7 +15,7 @@ import (
 	"time"
 )
 
-var port = 8999
+var config Config
 
 var myLocation location.MyLocation
 
@@ -50,6 +51,11 @@ var jafariConfig = map[string]string{"midnight": "Jafari"}
 var JAFARI = salat.NewCalculationMethod("Shia Ithna-Ashari, Leva Institute, Qum", jafariParams, jafariConfig)
 
 func init() {
+
+	if _, err := toml.DecodeFile("./config.toml", &config); err != nil {
+		fmt.Println(err)
+	}
+
 	// Log as JSON instead of the default ASCII formatter.
 	log.SetFormatter(&log.JSONFormatter{})
 
@@ -68,13 +74,9 @@ func main() {
 	registerSignalTermHandler()
 	registerSignalHupHandler()
 
-	var err error
-	myLocation, err = location.GetLocationFromIp()
-	if err != nil {
-		log.Warn(err.Error())
-	}
+	myLocation = *location.NewMyLocation(config.Location)
 
-	start(port, CreateRouter())
+	start(config, CreateRouter())
 	log.Info("SalatTimeKeeper stopping")
 
 }
@@ -84,17 +86,14 @@ func logClientRequest(req *http.Request) {
 	log.Debugf("request  %s from %s, %s", req.RequestURI, req.RemoteAddr, forwardedFor)
 }
 
-func start(port int, handler *mux.Router) {
+func start(config Config, handler *mux.Router) {
 	var wait time.Duration
 
-	addr := fmt.Sprintf("0.0.0.0:%d", port)
-
 	srv := &http.Server{
-		Addr: addr,
-		// Good practice to set timeouts to avoid Slowloris attacks.
-		WriteTimeout: time.Second * 15,
-		ReadTimeout:  time.Second * 15,
-		IdleTimeout:  time.Second * 60,
+		Addr:         config.Server.BindAddress,
+		WriteTimeout: time.Second * config.Server.WriteTimeout,
+		ReadTimeout:  time.Second * config.Server.ReadTimeout,
+		IdleTimeout:  time.Second * config.Server.IdleTimeout,
 		Handler:      handler,
 	}
 
@@ -105,7 +104,7 @@ func start(port int, handler *mux.Router) {
 		}
 	}()
 
-	log.Infof("Listening on %s", addr)
+	log.Infof("Listening on %s", config.Server.BindAddress)
 	<-shutdownChan
 
 	// Create a deadline to wait for.
