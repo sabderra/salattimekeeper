@@ -8,9 +8,7 @@ import (
 // TestSign per examples in http://aa.usno.navy.mil/faq/docs/JD_Formula.php
 func TestSign(test *testing.T) {
 
-	var s float64
-
-	s = Sign(247)
+	var s = Sign(247)
 	if s != 1 {
 		test.Error("Expected 1 got ", s)
 	}
@@ -23,9 +21,7 @@ func TestSign(test *testing.T) {
 
 // TestTrunc per examples in http://aa.usno.navy.mil/faq/docs/JD_Formula.php
 func TestTrunc(test *testing.T) {
-	var t float64
-
-	t = Trunc(-6.28)
+	var t = Trunc(-6.28)
 	if t != -6. {
 		test.Error("Expected -6.0 got ", t)
 	}

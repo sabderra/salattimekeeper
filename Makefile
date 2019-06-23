@@ -1,10 +1,9 @@
 SHELL = /bin/bash
 
 CURRENT_DIR = $(shell pwd)
-#GOPATH := $(CURRENT_DIR)
-VET_REPORT = $(GOPATH)/bin/vet.report
-LINT_REPORT = $(GOPATH)/bin/lint.report
-TEST_REPORT = $(GOPATH)/bin/tests.xml
+VET_REPORT = vet.report
+LINT_REPORT = lint.report
+TEST_REPORT = tests.xml
 GOARCH = amd64
 
 GO ?= go
@@ -30,24 +29,23 @@ test: compile
 	$(GO) test ./... 
 
 clean:
-	-rm -f $(VET_REPORT)
-	-rm -f $(GOPATH)/bin/*-amd64
+	-rm -f $(VET_REPORT) $(LINT_REPORT) $(TEST_REPORT)
+	-rm -f $(PKG)-$(VERSION)-*-amd64
 
 pretest:
-	dep ensure ; \
 	$(GO) fmt ./... ; \
 	$(GO) vet ./... 2>&1 | tee $(VET_REPORT) ; \
-	gometalinter ./... --vendor 2>&1 | tee $(LINT_REPORT) ; \
+	golangci-lint run 2>&1 | tee $(LINT_REPORT) ; \
 
 compile: darwin linux windows
 
 darwin:
-	GOOS=darwin GOARCH=amd64 $(GO) build -o $(GOPATH)/bin/$(PKG)-$(VERSION)-darwin-amd64
+	GOOS=darwin GOARCH=amd64 $(GO) build -o $(PKG)-$(VERSION)-darwin-amd64
 
 linux:
-	GOOS=linux GOARCH=amd64 $(GO) build -o $(GOPATH)/bin/$(PKG)-$(VERSION)-linux-amd64
+	GOOS=linux GOARCH=amd64 $(GO) build -o $(PKG)-$(VERSION)-linux-amd64
 
 windows:
-	GOOS=windows GOARCH=amd64 $(GO) build -o $(GOPATH)/bin/$(PKG)-$(VERSION)-windows-amd64
+	GOOS=windows GOARCH=amd64 $(GO) build -o $(PKG)-$(VERSION)-windows-amd64
 
 .PHONY: pretest test clean linux darwin windows 

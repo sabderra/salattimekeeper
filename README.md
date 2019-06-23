@@ -7,7 +7,7 @@ The Prayer time calculations are based on the Python code from http://praytimes.
 
 ## Install
 
-Install go version 1.10.3 or later visit https://golang.org/doc/install for instructions.
+Install go version 1.12.6 or later visit https://golang.org/doc/install for instructions.
 
 Setup GOROOT and GOPATH
 
@@ -17,12 +17,10 @@ export GOPATH=$HOME/workspaces/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 ```
 
-Install build dependencies. This project used [gometalinter](https://github.com/alecthomas/gometalinter) for linting and [Dep](https://github.com/golang/dep) for dependency management. Addition dependencies will be installed when building the project.
+Install build dependencies. This project used [golangci-lint](https://github.com/golangci/golangci-lint) for linting. 
 
 ```
-go get -u github.com/golang/dep/cmd/dep
-go get -u github.com/alecthomas/gometalinter
-gometalinter --install    # Install known linters
+curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.17.1
 ```
 
 Retrieve and build this project
