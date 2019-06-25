@@ -1,6 +1,7 @@
 package salat
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
@@ -19,6 +20,10 @@ func TestJulianFromTime_20180704_w_lng(test *testing.T) {
 func TestLocation_computePrayerTimes_20000101(test *testing.T) {
 
 	var l = NewLocation(42.4223, -71.1328, 0, ISNA)
+
+	tz := time.Now()
+	zone, offset := tz.Zone()
+	fmt.Println(zone, offset)
 
 	t := time.Date(2000, time.January, 1, 0, 0, 0, 0, time.Local)
 	times := l.computePrayerTimes(t)
