@@ -1,7 +1,18 @@
 language: go
-go_import_path: github.com/sabderra/salattimekeeper
+
+#go_import_path: github.com/sabderra/salattimekeeper
+
+env:
+  - GO111MODULE=on
+
+go:
+  - 1.12.x
+
 git:
   depth: 1
-go:
-  - "1.12.x"
-os: [ linux, osx ]
+
+before_script:
+  - make init-dev
+
+script:
+  - make 

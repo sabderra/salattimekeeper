@@ -32,6 +32,9 @@ clean:
 	-rm -f $(VET_REPORT) $(LINT_REPORT) $(TEST_REPORT)
 	-rm -f $(PKG)-$(VERSION)-*-amd64
 
+init-dev:
+	$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint
+
 pretest:
 	$(GO) fmt ./... ; \
 	$(GO) vet ./... 2>&1 | tee $(VET_REPORT) ; \
