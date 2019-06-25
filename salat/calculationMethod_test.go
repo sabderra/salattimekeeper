@@ -8,9 +8,11 @@ import (
 var isnaParams = map[TIMES]float64{FAJR: 15, ISHA: 15}
 var isnaConfig = make(map[string]string)
 var ISNA = NewCalculationMethod("Islamic Society of North America (ISNA)", isnaParams, isnaConfig)
+var tzLocation, _ = time.LoadLocation("America/New_York")
 
 func TestJulianFromTime_20180704_w_lng(test *testing.T) {
-	t1 := time.Date(2018, time.July, 4, 0, 0, 0, 0, time.Local)
+
+	t1 := time.Date(2018, time.July, 4, 0, 0, 0, 0, tzLocation)
 	res := JulianFromTime(t1)
 	res_lng := res - (-71.1328)/(15*24.0)
 	assertFloatEquals(test, res_lng, 2458303.697591111, "20180704 with lng adj")
@@ -24,8 +26,7 @@ func TestLocation_computePrayerTimes_20000101(test *testing.T) {
 	//zone, offset := tz.Zone()
 	//fmt.Println(zone, offset)
 
-	newYork, _ := time.LoadLocation("America/New_York")
-	t := time.Date(2000, time.January, 1, 0, 0, 0, 0, newYork)
+	t := time.Date(2000, time.January, 1, 0, 0, 0, 0, tzLocation)
 	times := l.computePrayerTimes(t)
 
 	assertClose(test, times[FAJR], 6.8257790973714405, 6, "Fajr")
@@ -41,8 +42,7 @@ func TestLocation_computePrayerTimes_20180703(test *testing.T) {
 
 	var l = NewLocation(42.4223, -71.1328, 0, ISNA)
 
-	newYork, _ := time.LoadLocation("America/New_York")
-	t := time.Date(2018, time.July, 3, 0, 0, 0, 0, newYork)
+	t := time.Date(2018, time.July, 3, 0, 0, 0, 0, tzLocation)
 	times := l.computePrayerTimes(t)
 
 	assertClose(test, times[FAJR], 3.470203191708414, 6, "Fajr")
@@ -59,8 +59,7 @@ func TestLocation_computePrayerTimes_20180705(test *testing.T) {
 
 	var l = NewLocation(42.4223, -71.1328, 0, ISNA)
 
-	newYork, _ := time.LoadLocation("America/New_York")
-	t := time.Date(2018, time.July, 5, 0, 0, 0, 0, newYork)
+	t := time.Date(2018, time.July, 5, 0, 0, 0, 0, tzLocation)
 	times := l.computePrayerTimes(t)
 
 	assertClose(test, times[FAJR], 3.498769437304892, 6, "Fajr")

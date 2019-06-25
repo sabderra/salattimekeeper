@@ -23,7 +23,7 @@ func TestTimeKeeper_GetPrayerTimes_20000101(test *testing.T) {
 
 	timeKeeper := NewTimeKeeper(42.4223, -71.1328, 0, ISNA)
 
-	t := time.Date(2000, time.January, 1, 0, 0, 0, 0, time.Local)
+	t := time.Date(2000, time.January, 1, 0, 0, 0, 0, tzLocation)
 	times := timeKeeper.GetPrayerTimes(t)
 
 	assertEquals(test, times[FAJR], "06:50", "Fajr")
@@ -39,7 +39,7 @@ func TestTimeKeeper_GetPrayerTimes_20180703(test *testing.T) {
 
 	timeKeeper := NewTimeKeeper(42.4223, -71.1328, 0, ISNA)
 
-	t := time.Date(2018, time.July, 3, 0, 0, 0, 0, time.Local)
+	t := time.Date(2018, time.July, 3, 0, 0, 0, 0, tzLocation)
 	times := timeKeeper.GetPrayerTimes(t)
 
 	assertEquals(test, times[FAJR], "03:28", "Fajr")
@@ -55,7 +55,7 @@ func TestTimeKeeper_GetPrayerTimes_20180705(test *testing.T) {
 
 	timeKeeper := NewTimeKeeper(42.4223, -71.1328, 0, ISNA)
 
-	t := time.Date(2018, time.July, 5, 0, 0, 0, 0, time.Local)
+	t := time.Date(2018, time.July, 5, 0, 0, 0, 0, tzLocation)
 	times := timeKeeper.GetPrayerTimes(t)
 
 	assertEquals(test, times[FAJR], "03:30", "Fajr")
