@@ -1,6 +1,6 @@
 # Salat Time Keeper
 
-[![Build Status](https://travis-ci.com/sabderra/salattimekeeper?branch=refresh)](https://travis-ci.com/sabderra/salattimekeeper)
+[![Build Status](https://travis-ci.com/sabderra/salattimekeeper.svg?branch=refresh)](https://travis-ci.com/sabderra/salattimekeeper)
 
 Go based REST server for calculating Salat times.
 
