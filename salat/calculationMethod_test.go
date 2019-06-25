@@ -1,7 +1,6 @@
 package salat
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
@@ -21,11 +20,12 @@ func TestLocation_computePrayerTimes_20000101(test *testing.T) {
 
 	var l = NewLocation(42.4223, -71.1328, 0, ISNA)
 
-	tz := time.Now()
-	zone, offset := tz.Zone()
-	fmt.Println(zone, offset)
+	//tz := time.Now()
+	//zone, offset := tz.Zone()
+	//fmt.Println(zone, offset)
 
-	t := time.Date(2000, time.January, 1, 0, 0, 0, 0, time.Local)
+	newYork, _ := time.LoadLocation("America/New_York")
+	t := time.Date(2000, time.January, 1, 0, 0, 0, 0, newYork)
 	times := l.computePrayerTimes(t)
 
 	assertClose(test, times[FAJR], 6.8257790973714405, 6, "Fajr")
@@ -41,7 +41,8 @@ func TestLocation_computePrayerTimes_20180703(test *testing.T) {
 
 	var l = NewLocation(42.4223, -71.1328, 0, ISNA)
 
-	t := time.Date(2018, time.July, 3, 0, 0, 0, 0, time.Local)
+	newYork, _ := time.LoadLocation("America/New_York")
+	t := time.Date(2018, time.July, 3, 0, 0, 0, 0, newYork)
 	times := l.computePrayerTimes(t)
 
 	assertClose(test, times[FAJR], 3.470203191708414, 6, "Fajr")
@@ -58,7 +59,8 @@ func TestLocation_computePrayerTimes_20180705(test *testing.T) {
 
 	var l = NewLocation(42.4223, -71.1328, 0, ISNA)
 
-	t := time.Date(2018, time.July, 5, 0, 0, 0, 0, time.Local)
+	newYork, _ := time.LoadLocation("America/New_York")
+	t := time.Date(2018, time.July, 5, 0, 0, 0, 0, newYork)
 	times := l.computePrayerTimes(t)
 
 	assertClose(test, times[FAJR], 3.498769437304892, 6, "Fajr")
